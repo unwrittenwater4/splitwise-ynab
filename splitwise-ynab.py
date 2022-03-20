@@ -12,7 +12,7 @@ class Splitwise_transaction:
     '''Class represnting a Splitwise transaction'''
     def __init__(self, name, amount, date, details) -> None:
         self.name = name
-        self.amount = int(float(amount) * 1000)
+        self.amount = (int(float(amount) * 1000) * -1)
         self.date = date
         self.details = details
 
