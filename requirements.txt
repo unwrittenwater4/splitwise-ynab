@@ -1,2 +1,2 @@
 splitwise==2.3.0
-ynab-python==1.0.0
+git+https://github.com/deanmcgregor/ynab-python.git@master
