@@ -24,7 +24,7 @@ def get_splitwise_transactions(splitwise_customer_key, splitwise_customer_secret
     sw = Splitwise(splitwise_customer_key,
                    splitwise_customer_secret, api_key=splitwise_api_key)
     currentUser = sw.getCurrentUser()
-    expenses = sw.getExpenses()
+    expenses = sw.getExpenses(limit=100, dated_after="2022-09-09")
     transactions = []
     for expense in expenses:
         debts = expense.getRepayments()
