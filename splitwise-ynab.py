@@ -10,9 +10,9 @@ from ynab.rest import ApiException
 
 class Splitwise_transaction:
     '''Class represnting a Splitwise transaction'''
-    def __init__(self, name, amount, date, details) -> None:
+    def __init__(self, name, amount, date, details, debt = True) -> None:
         self.name = details
-        self.amount = (int(float(amount) * 1000) * -1)
+        self.amount = (int(float(amount) * 1000) * (-1 if debt else 1))
         self.date = date
         self.details = name
 
@@ -24,7 +24,7 @@ def get_splitwise_transactions(splitwise_customer_key, splitwise_customer_secret
     sw = Splitwise(splitwise_customer_key,
                    splitwise_customer_secret, api_key=splitwise_api_key)
     currentUser = sw.getCurrentUser()
-    expenses = sw.getExpenses(limit=100, dated_after="2022-09-09")
+    expenses = sw.getExpenses(limit=2, dated_after="2022-09-09")
     transactions = []
     for expense in expenses:
         debts = expense.getRepayments()
@@ -36,6 +36,16 @@ def get_splitwise_transactions(splitwise_customer_key, splitwise_customer_secret
                         amount=debt.getAmount(),
                         date=expense.getDate(),
                         details=expense.getDescription()
+                    )
+                )
+            else:
+                transactions.append(
+                    Splitwise_transaction(
+                        name=expense.getCreatedBy().getFirstName(),
+                        amount=debt.getAmount(),
+                        date=expense.getDate(),
+                        details=expense.getDescription(),
+                        debt=False
                     )
                 )
     return transactions
